@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            * {
+                text-align: center;
+            }
+            
+            canvas {
+                width: 75%;
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="game"></canvas>
+        <br>
+        <img src="images/red.png" id="tile">
+        <script>
+            //cutom
+            var tps = 0;
+            var canvasName = "game";
+            var canvasWidth = 500;
+            var canvasHeight = 200;
+            
+            //canvas info
+            var canvas = document.getElementById(canvasName);
+            var ctx = canvas.getContext("2d");
+            
+            //canvas dimensions
+            document.getElementById(canvasName).width = canvasWidth;
+            document.getElementById(canvasName).height = canvasHeight;
+            
+            //tiles
+            var tiles = [];
+            //collum 1
+            var tile0 = {x:0, y:0, type:"water", image:tile}; tiles.push(tile0);
+            var tile1 = {x:10, y:10, type:"water", image:tile}; tiles.push(tile1);
+            
+            var changeTile;
+            //render
+            window.setInterval(function(){ render(); }, tps);
+            function render() {
+                var newTileNum = 0;
+                var numOfTiles = 1;
+                var loop = true;
+                while (loop) {
+                    if (newTileNum <= numOfTiles) {
+                        changeTile = tiles[newTileNum];
+                        develop();
+                        newTileNum = newTileNum + 1;
+                    } else {
+                        loop = false;
+                    }
+                }
+            }
+            
+            //Developer function
+            function develop() {
+                
+                ctx.drawImage(changeTile.image, changeTile.x, changeTile.y);
+            }
+            
+            /*
+            tile options:
+            -tile x & y
+            -tile attributes
+            -tile image
+            -tile name
+            -tile enabled?
+            -tile order?
+            
+            pre-made scripts:
+            collision detection
+            add tile
+            
+            */
+        </script>
+    </body>
+</html>

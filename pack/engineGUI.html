@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            * {
+                text-align: center;
+            }
+            
+            canvas {
+                border: 1px solid black;
+            }
+            
+            #sidebyside {
+                display: flex;
+            }
+            
+            #create {
+                flex: 0 0 33.333%;
+            }
+            
+            #canvas {
+                flex: 0 0 33.333%;
+            }
+            
+            #exist {
+                flex: 0 0 33.333%;
+            }
+            
+            .tile {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>QGS Tile Engine GUI</h1>
+        
+        <div id="sidebyside">
+        <div id="create">
+            <h3>New Tile Options</h3>
+            <p>Tools</p>
+            <button>Place to grid</button>
+            <button>Place to specific coords</button>
+            <br>
+            <button>Get grid coordinates</button>
+            <button>Get specific coordinates</button>
+        <br>
+        
+        <p>Tile Builder</p>
+            NAME <input><br>
+            IMAGE <input><br>
+            ATTRIBUTE <input><br>
+        <br>
+        
+        <p>Tile Select</p>
+            Tile <input><br>
+            <br>
+        </div>
+            
+        <div id="canvas">
+            <h3>Canvas Options</h3>
+            Canvas name <input id="canvas_name"><br>
+            TPS <input id="tps"><br>
+            <br>
+            Texture Dimensions <input id="texture_dimensions"><br>
+            Grid Height <input id="grid_height"><br>
+            Grid Width <input id="grid_width"><br>
+            <br>
+        </div>
+            
+        <div id="exist">
+            <h3>Existing Tiles</h3>
+            
+            <div class="tile">Tile# Name Image Coordinates [Attributes] //buttons</div>
+            <div class="tile">00 Water <img src="img.png"> (0,0) [] <button>Delete</button><button>Edit</button></div>
+        </div>
+        </div>
+        
+        <br>
+        <br>
+        <p>Example</p>
+        <canvas id="myCanvas"></canvas>
+        <p>html tag output</p>
+        <p>js output</p>
+        <p>save load</p>
+        
+        <script>
+            var canvas_name;
+            var tps;
+            var texture_dimensions;
+            var grid_height;
+            var grid_width;
+            
+            window.setInterval(function(){ canvas_options(); }, 0);
+            function canvas_options() {
+                canvas_name = document.getElementById("canvas_name").value;
+                tps = document.getElementById("tps").value;
+                texture_dimensions = document.getElementById("texture_dimensions").value;
+                grid_height = document.getElementById("grid_height").value * texture_dimensions;
+                grid_width = document.getElementById("grid_width").value * texture_dimensions;
+                
+                document.getElementById(canvas_name).width = grid_height;
+                document.getElementById(canvas_name).height = grid_width;
+            }
+        </script>
+    </body>
+</html>
