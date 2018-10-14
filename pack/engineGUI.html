@@ -62,8 +62,8 @@
             TPS <input id="tps"><br>
             <br>
             Texture Dimensions <input id="texture_dimensions"><br>
-            Grid Height <input id="gridheight"><br>
-            Grid Width <input id="gridwidth"><br>
+            Grid Height <input id="grid_height"><br>
+            Grid Width <input id="grid_width"><br>
             <br>
         </div>
             
@@ -90,18 +90,16 @@
             var grid_height;
             var grid_width;
             
-            window.setInterval(function(){ canvas_options(); }, 500);
-
+            window.setInterval(function(){ canvas_options(); }, 0);
             function canvas_options() {
                 canvas_name = document.getElementById("canvas_name").value;
                 tps = document.getElementById("tps").value;
                 texture_dimensions = document.getElementById("texture_dimensions").value;
-                grid_height = document.getElementById("gridheight").value * texture_dimensions;
-                grid_width = document.getElementById("gridwidth").value * texture_dimensions;
+                grid_height = document.getElementById("grid_height").value * texture_dimensions;
+                grid_width = document.getElementById("grid_width").value * texture_dimensions;
                 
-                document.getElementById(canvas_name).width = grid_width;
-                document.getElementById(canvas_name).height = grid_height;
-		
+                document.getElementById(canvas_name).width = grid_height;
+                document.getElementById(canvas_name).height = grid_width;
             }
         </script>
     </body>
