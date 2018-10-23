@@ -1,0 +1,13 @@
+Tools (Buttons):
+Place Tile
+Get coordinates
+Place at specific coordinates
+
+Tile Settings:
+
+SELECTED TILE:
+[list of tiles]
+
+Create Tile:
+_name [image] +add attribute
+
