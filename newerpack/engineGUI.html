@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <style>
+            * {
+                text-align: center;
+            }
+            
+            canvas {
+                border: 1px solid black;
+            }
+            
+            #sidebyside {
+                display: flex;
+            }
+            
+            #create {
+                flex: 0 0 33.333%;
+            }
+            
+            #canvas {
+                flex: 0 0 33.333%;
+            }
+            
+            #exist {
+                flex: 0 0 33.333%;
+            }
+            
+            .tile {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="images">
+        
+        </div>
+        <img src="test.png" id="tile">
+        <h1>QGS Tile Engine GUI Alpha Test Thing</h1>
+        
+        <div id="sidebyside">
+        <div id="create">
+            <h3>New Tile Options</h3>
+            <p>Tools</p>
+            <button>Place to tile grid</button>
+            <button onclick="place_specific_coords()">Place to specific pixel coords</button>
+            <br>
+            <button>Get tile grid coordinates</button>
+            <button>Get specific pixel coordinates</button>
+            <br>
+            <p>Current Tool:</p>
+        <br>
+        
+        <p>Tile Select & Builder</p>
+            Type <select id="type"></select><button onclick="tile_type()">+</button>
+            <br>
+            Image <select id="image"></select><button onclick="upload_image()">+</button>
+        </div>
+            
+        <div id="canvas">
+            <h3>Canvas Options</h3>
+            <p>Game Canvas</p>
+            Canvas Name <input id="canvas_name"><br>
+            <br>
+            Texture Dimensions <input id="texture_dimensions"><br>
+            Grid Height <input id="gridheight"><br>
+            Grid Width <input id="gridwidth"><br>
+            <br>
+            <p>Example Canvas</p>
+            <button onclick="fgrid()">Toggle Grid</button>
+            <button onclick="fgamebox()">Toggle Game Box</button><br>
+            Grid Height <input id="exgridheight"><br>
+            Grid Width <input id="exgridwidth"><br>
+        </div>
+            
+        <div id="exist">
+            <h3>Existing Tiles</h3>
+            <div class="tile">Tile# Name Image Coordinates Delete</div>
+            
+        </div>
+        </div>
+        
+        <br>
+        <br>
+        <p>Example</p>
+        <canvas id="example"></canvas>
+        
+        <p>html tag output</p>
+        <p>js output</p>
+        <button onclick="save()">save</button>
+        <button onclick="load()">load</button>
+        
+        <script>
+            //engine by SuperQGS @ QGsoftware.github.io
+            
+            //tiles
+            var tiles = [{"x":"0","y":"0","type":"t","image":tile}];
+            
+            //CANVAS/EXAMPLE CANVAS OPTIONS
+            
+            //game variables
+            var canvas_name;
+            var texture_dimensions;
+            var grid_height;
+            var grid_width;
+            
+            //example variables
+            var grid = false;
+            var gamebox = false;
+            
+            //buttons and boxes
+            //textbox values function
+            window.setInterval(function(){ textboxes(); }, 0);
+            function textboxes() {
+                //game variables
+                canvas_name = document.getElementById("canvas_name").value;
+                texture_dimensions = document.getElementById("texture_dimensions").value;
+                grid_height = document.getElementById("gridheight").value * texture_dimensions;
+                grid_width = document.getElementById("gridwidth").value * texture_dimensions;
+                //example variables
+                exgrid_height = document.getElementById("exgridheight").value * texture_dimensions;
+                exgrid_width = document.getElementById("exgridwidth").value * texture_dimensions;
+            }
+            //toggle grid function        
+            function fgrid() {
+                if (grid == true) {
+                    grid = false;
+                } else if (grid == false) {
+                    grid = true;
+                }
+            }
+            //toggle gamebox function
+            function fgamebox() {
+                if (gamebox == true) {
+                    gamebox = false;
+                } else if (gamebox == false) {
+                    gamebox = true;
+                }
+            }
+            
+            //type function
+            var type_array = [];
+            function tile_type() {
+                //get type name
+                var type_name = prompt("type:");
+                //add type to array
+                type_array[type_array.length] = type_name;
+                //create list of types
+                var i;
+                var select_tile_list = "";
+                for (i = 0; i < type_array.length; i++) {
+                    
+                    select_tile_list = select_tile_list + "<option>" + type_array[i] + "</option>";
+                }
+                document.getElementById("type").innerHTML = select_tile_list;
+                
+            }
+            //Tools
+            //place to specific pixel coords
+            function place_specific_coords() {
+                var place_specific_x = prompt("X:");
+                var place_specific_y = prompt("Y:");
+                var place_specific_type = document.getElementById("type").value;
+                var place_specific_image = eval(document.getElementById("image").value);
+                //var place_specific_image =
+                if (place_specific_type == "No Tile Selected" || place_specific_type == "") {
+                    alert("No Tile Selected");
+                } else {
+                    tiles[tiles.length] = {x:place_specific_x, y:place_specific_y, type:place_specific_type, image:place_specific_image};
+                }
+                
+            }
+            
+            //DRAW CANVAS
+            window.setInterval(function(){ drawcanvas(); }, 0);
+            function drawcanvas() {
+                //draw example canvas
+                document.getElementById("example").width = exgrid_width;
+                document.getElementById("example").height = exgrid_height;
+                //get  2d context stuff
+                var c = document.getElementById("example");
+                var ctx = c.getContext("2d");
+                //translate 0,0 to center of screen
+                //y is still flipped but oh well
+                ctx.translate(c.width / 2,c.height / 2);
+                
+                //render tiles
+                var change_tile;
+                var new_tile_num = 0;
+                var num_of_tiles = tiles.length - 1;
+                var tileloop = true;
+                while (tileloop) {
+                    if (new_tile_num <= num_of_tiles) {
+                        change_tile = tiles[new_tile_num];
+                        ctx.drawImage(change_tile.image, change_tile.x, change_tile.y);
+                        new_tile_num = new_tile_num + 1;
+                    } else {
+                        tileloop = false;
+                    }
+                }
+                
+                //grid and gamebox
+                //grid
+                if (grid == true) {
+                    var gridlinex = 0 - (exgrid_width/2);
+                    while (gridlinex < exgrid_width/2) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = "black";
+                        ctx.moveTo(gridlinex * texture_dimensions,0 - exgrid_height);
+                        ctx.lineTo(gridlinex * texture_dimensions,exgrid_height);
+                        ctx.stroke();
+                        gridlinex = gridlinex + 1;
+                    }
+                    var gridliney = 0 - (exgrid_height / 2);
+                    while (gridliney < exgrid_height / 2) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = "black";
+                        ctx.moveTo(0 - exgrid_width,gridliney * texture_dimensions);
+                        ctx.lineTo(exgrid_width,gridliney * texture_dimensions);
+                        ctx.stroke();
+                        gridliney = gridliney + 1;
+                    }
+                }
+                //gamebox
+                if (gamebox == true) {
+                    ctx.rect(0 - (grid_width / 2 ),0 + (grid_height / 2),0 + grid_width,0 - grid_height);
+                    ctx.strokeStyle = "blue";
+                    ctx.stroke(); ctx.stroke();
+                }
+
+            }
+            
+            
+            //existing tiles list
+            window.setInterval(function(){ existing_tiles(); }, 0);
+            var exist_list = [];
+            var exist_num = tiles.length - 1;
+            var exist_list_html = "";
+            function existing_tiles() {
+                
+                while (exist_num < tiles.length) {
+                    console.log(tiles[exist_num]);
+                    var exist_name = tiles[exist_num].type;
+                    var exist_x = tiles[exist_num].x;
+                    var exist_y = tiles[exist_num].y;
+                    
+                    exist_list[exist_num] = '<div class="tile">' + exist_num + ' ' + exist_name + ' <img src="img.png"> (' + exist_x + ',' + exist_y + ') <button onclick="delete_tile(' + exist_num + ')">Delete</button></div>';
+                    
+                    var compile_list = 0;
+                    var compiled_exist_list = "";
+                    while (compile_list < exist_list.length) {
+                        compiled_exist_list = compiled_exist_list + exist_list[compile_list];
+                        compile_list = compile_list + 1;
+                    }
+                    
+                    exist_list_html = compiled_exist_list;
+                    exist_num = exist_num + 1;
+                }
+                
+                document.getElementById("exist").innerHTML = '<h3>Existing Tiles</h3>' + '<div class="tile">Tile# Name Image (Coordinates) Delete</div>' + exist_list_html;
+            }
+            
+            
+            function save() {
+                alert(JSON.stringify(tiles, null, 0));
+            }
+            
+            function load() {
+                tiles = prompt("Load text:");
+            }
+            
+            function delete_tile(delete_num) {
+                tiles.splice(delete_num, 1);
+                exist_list.splice(delete_num, 1);
+            }
+            
+            var image_array = [];
+            var image_div = "";
+            function upload_image() {
+                //get type name
+                var image_id = prompt("name:");
+                var image_dir = prompt("directory:");
+                //add image to array
+                image_array[image_array.length] = image_id;
+                //create list of images
+                var i;
+                var select_tile_list = "";
+                for (i = 0; i < image_array.length; i++) {
+                    
+                    select_tile_list = select_tile_list + "<option>" + image_array[i] + "</option>";
+                }
+                document.getElementById("image").innerHTML = select_tile_list;
+                image_div = image_div + "<img src=" + image_dir +  " id=" + image_id + ">"
+                document.getElementById("images").innerHTML = image_div;
+            }
+            //todo
+            //delete
+            //render priority
+            //place on click
+            //get tile coords
+            //get pixel coords
+            //outputs - maybe need to rerout the engine
+            //save and load
+            //comment
+        </script>
+    </body>
+</html>
