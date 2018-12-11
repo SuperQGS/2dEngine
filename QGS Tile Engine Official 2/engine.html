@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            * {
+                text-align: center;
+            }
+            
+            canvas {
+                border: 1px solid black;
+            }
+        </style>
+    </head>
+    <body>
+        <!--PASTE CANVAS TAG UNDER HERE-->
+        
+        <br>
+        <!--PASTE IMAGE TAGS UNDER HERE-->
+        
+        <script>
+            //PASTE CANVAS VARIABLES UNDER HERE
+            
+            //PASTE TILES UNDER HERE
+            
+            
+            //canvas info
+            var canvas = document.getElementById(canvas_name);
+            var ctx = canvas.getContext("2d");
+            
+            //canvas dimensions
+            document.getElementById(canvas_name).width = grid_width;
+            document.getElementById(canvas_name).height = grid_height;
+            
+            //Render stuff
+            var change_tile;
+            window.setInterval(function(){ render(); }, 0);
+            function render() {
+                var new_tile_num = 0;
+                var num_of_tiles = 1;
+                var loop = true;
+                while (loop) {
+                    if (new_tile_num <= num_of_tiles) {
+                        change_tile = tiles[new_tile_num];
+                        ctx.imageSmoothingEnabled = false;
+                        develop();
+                        new_tile_num = new_tile_num + 1;
+                    } else {
+                        loop = false;
+                    }
+                }
+            }
+            
+            //Developer function
+            function develop() {
+                //code goes here probably
+                
+                ctx.drawImage(change_tile.image, change_tile.x, change_tile.y);
+            }
+        </script>
+    </body>
+</html>
